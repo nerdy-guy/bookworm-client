@@ -69,15 +69,15 @@ const Navbar = () => {
             )}
           </button>
           {loggedIn ? (
-            <button>Sign out</button>
+            <button>Logout</button>
           ) : (
             <>
-              <Link to="/signin">Sign in</Link>{" "}
+              <Link to="/login">login</Link>{" "}
               <Link
-                to="signup"
+                to="/register"
                 className="rounded-sm border-[1px] border-[#282828] bg-transparent px-2 py-1 duration-700 hover:border-transparent hover:bg-[#83a598] hover:text-[#fbf1c7] dark:border-[#fbf1c7] dark:hover:border-transparent dark:hover:bg-[#458588]"
               >
-                Sign up
+                Register
               </Link>
             </>
           )}
@@ -120,10 +120,10 @@ const Navbar = () => {
                   ))}
 
                 {loggedIn ? (
-                  <button>Sign out</button>
+                  <button>Logout</button>
                 ) : (
                   <>
-                    <button>Sign in</button> <button>Sign up</button>
+                    <button>Login</button> <button>Register</button>
                   </>
                 )}
               </ul>
