@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import useToggle from "../hooks/useToggle";
+import { useState } from "react";
 
 const schema = z.object({
   name: z
@@ -19,22 +20,40 @@ const schema = z.object({
 
 const Register = () => {
   const [isVisible, toggleVisibility] = useToggle();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
-    handleSubmit,
     register,
+    handleSubmit,
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) });
 
-  const handleSignup = (data) => {
-    console.log(data);
+  const handleRegister = async (data) => {
+    try {
+      const res = await fetch("http://localhost:3000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+        credentials: "include",
+      });
+
+      const json = await res.json();
+
+      if (res.status === 409) {
+        return setErrorMessage(json.error);
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
   };
 
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center bg-[#fbf1c7] text-[#282828] dark:bg-[#282828] dark:text-[#ebdbb2]">
       <div className="flex w-full flex-col items-center">
         <form
-          onSubmit={handleSubmit(handleSignup)}
+          onSubmit={handleSubmit(handleRegister)}
           className="mx-auto flex w-[90%] flex-col gap-4 rounded bg-[#f9f5d7] p-8 dark:bg-[#1d2021] md:w-[30rem] md:p-16"
         >
           <div className="flex flex-col gap-1">
@@ -79,6 +98,8 @@ const Register = () => {
             </button>
           </div>
           <p className="text-[#cc241d]">{errors.password?.message}</p>
+
+          <p className="text-[#cc241d]">{errorMessage}</p>
 
           <button
             type="submit"

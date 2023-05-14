@@ -5,11 +5,12 @@ import { HiMenu } from "react-icons/hi";
 import { ThemeContext } from "../contexts/ThemeContext";
 import logo from "../assets/worm.svg";
 import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Navbar = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [showNav, setShowNav] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const { user } = useContext(AuthContext);
 
   const navItems = [
     {
@@ -38,11 +39,6 @@ const Navbar = () => {
     setShowNav((prevShowNav) => !prevShowNav);
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const templog = () => {
-    setLoggedIn(!loggedIn);
-  };
-
   return (
     <nav className="w-full bg-[#f9f5d7] text-[#282828] dark:bg-[#1d2021] dark:text-[#ebdbb2]">
       <div className="mx-auto flex max-w-[90%] items-center justify-between py-4">
@@ -54,7 +50,7 @@ const Navbar = () => {
         {/* Desktop Navbar */}
         <div className="hidden items-center gap-4 md:flex">
           <ul className="flex flex-row gap-8">
-            {loggedIn &&
+            {user.user_id &&
               navItems.map((navItem) => (
                 <li key={navItem.id}>
                   <NavLink to={navItem.path}>{navItem.title}</NavLink>
@@ -68,7 +64,7 @@ const Navbar = () => {
               <BsFillSunFill className="h-6 w-6" title="Switch to light mode" />
             )}
           </button>
-          {loggedIn ? (
+          {user.user_id ? (
             <button>Logout</button>
           ) : (
             <>
@@ -112,14 +108,14 @@ const Navbar = () => {
 
             {showNav ? (
               <ul className="absolute right-0 z-50 mt-4 flex w-full flex-col items-center gap-8 p-8 opacity-80 dark:bg-[#1d2021]">
-                {loggedIn &&
+                {user.user_id &&
                   navItems.map((navItem) => (
                     <li key={navItem.id}>
                       <NavLink to={navItem.path}>{navItem.title}</NavLink>
                     </li>
                   ))}
 
-                {loggedIn ? (
+                {user.user_id ? (
                   <button>Logout</button>
                 ) : (
                   <>

@@ -31,22 +31,6 @@ const App = () => {
         },
       ],
     },
-    // {
-    //   path: "/",
-    //   element: <Home />,
-    // },
-    // {
-    //   path: "/register",
-    //   element: <Register />,
-    // },
-    // {
-    //   path: "/login",
-    //   element: <Login />,
-    // },
-    // {
-    //   path: "/:page_id",
-    //   element: <Book />,
-    // },
   ]);
 
   const { theme } = useContext(ThemeContext);

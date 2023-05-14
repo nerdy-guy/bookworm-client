@@ -1,9 +1,11 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import useToggle from "../hooks/useToggle";
+import { AuthContext } from "../contexts/AuthContext";
+import { useContext, useState } from "react";
 
 const schema = z.object({
   email: z.string().email(),
@@ -14,18 +16,31 @@ const schema = z.object({
 });
 
 const Login = () => {
+  const { user } = useContext(AuthContext);
+
+  const { login } = useContext(AuthContext);
   const [isVisible, toggleVisibility] = useToggle();
+  const navigate = useNavigate();
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
-    handleSubmit,
     register,
+    handleSubmit,
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) });
 
-  const handleLogin = (data) => {
-    console.log(data);
-  };
+  const handleLogin = async (data) => {
+    try {
+      await login(data, setErrorMessage);
 
+      if (user.user_id) {
+        navigate("/");
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center bg-[#fbf1c7] text-[#282828] dark:bg-[#282828] dark:text-[#ebdbb2]">
       <div className="flex w-full flex-col items-center">
@@ -63,6 +78,8 @@ const Login = () => {
             </button>
           </div>
           <p className="text-[#cc241d]">{errors.password?.message}</p>
+
+          <p className="text-[#cc241d]">{errorMessage}</p>
 
           <button
             type="submit"
