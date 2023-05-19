@@ -2,7 +2,7 @@ import { CgSpinner } from "react-icons/cg";
 
 const Loader = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center text-center">
+    <div className="flex min-h-screen items-center justify-center bg-[#fbf1c7] dark:bg-[#282828]">
       <div role="status">
         <CgSpinner
           aria-hidden="true"

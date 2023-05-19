@@ -6,6 +6,9 @@ import { useContext } from "react";
 import { ThemeContext } from "./contexts/ThemeContext";
 import Book from "./pages/Book";
 import Layout from "./components/Layout";
+import Stats from "./pages/Stats";
+import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -15,7 +18,11 @@ const App = () => {
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: (
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/register",
@@ -26,10 +33,18 @@ const App = () => {
           element: <Login />,
         },
         {
-          path: "/:page_id",
+          path: "/:id",
           element: <Book />,
         },
+        {
+          path: "/stats",
+          element: <Stats />,
+        },
       ],
+    },
+    {
+      path: "*",
+      element: <NotFound />,
     },
   ]);
 

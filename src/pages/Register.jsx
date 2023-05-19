@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import useToggle from "../hooks/useToggle";
 import { useState } from "react";
@@ -21,6 +21,7 @@ const schema = z.object({
 const Register = () => {
   const [isVisible, toggleVisibility] = useToggle();
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const {
     register,
@@ -44,6 +45,8 @@ const Register = () => {
       if (res.status === 409) {
         return setErrorMessage(json.error);
       }
+
+      navigate("/login");
     } catch (error) {
       setErrorMessage(error.message);
     }

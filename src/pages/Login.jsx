@@ -28,17 +28,18 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({ resolver: zodResolver(schema) });
 
   const handleLogin = async (data) => {
     try {
-      await login(data, setErrorMessage);
+      login(data, setErrorMessage, reset);
 
-      if (user.user_id) {
+      if (user?.user_id) {
         navigate("/");
       }
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrorMessage(error);
     }
   };
   return (

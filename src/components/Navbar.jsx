@@ -35,6 +35,21 @@ const Navbar = () => {
     },
   ];
 
+  const handleLogout = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const toggleNav = () => {
     setShowNav((prevShowNav) => !prevShowNav);
   };
@@ -50,7 +65,7 @@ const Navbar = () => {
         {/* Desktop Navbar */}
         <div className="hidden items-center gap-4 md:flex">
           <ul className="flex flex-row gap-8">
-            {user.user_id &&
+            {user?.user_id &&
               navItems.map((navItem) => (
                 <li key={navItem.id}>
                   <NavLink to={navItem.path}>{navItem.title}</NavLink>
@@ -64,7 +79,7 @@ const Navbar = () => {
               <BsFillSunFill className="h-6 w-6" title="Switch to light mode" />
             )}
           </button>
-          {user.user_id ? (
+          {user?.user_id ? (
             <button>Logout</button>
           ) : (
             <>
@@ -108,15 +123,15 @@ const Navbar = () => {
 
             {showNav ? (
               <ul className="absolute right-0 z-50 mt-4 flex w-full flex-col items-center gap-8 p-8 opacity-80 dark:bg-[#1d2021]">
-                {user.user_id &&
+                {user?.user_id &&
                   navItems.map((navItem) => (
                     <li key={navItem.id}>
                       <NavLink to={navItem.path}>{navItem.title}</NavLink>
                     </li>
                   ))}
 
-                {user.user_id ? (
-                  <button>Logout</button>
+                {user?.user_id ? (
+                  <button onClick={handleLogout}>Logout</button>
                 ) : (
                   <>
                     <button>Login</button> <button>Register</button>

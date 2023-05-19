@@ -3,7 +3,7 @@ import notFound from "../assets/404.svg";
 
 const NotFound = () => {
   return (
-    <div className="flex min-h-screen flex-col items-center  gap-4 bg-[#fbf1c7] text-2xl dark:bg-[#282828] md:text-3xl">
+    <div className="flex min-h-screen flex-col items-center  gap-4 bg-[#fbf1c7] text-2xl text-[#282828] dark:bg-[#282828] dark:text-[#ebdbb2] md:text-3xl">
       <img src={notFound} alt="404 not found" className="w-96" />
       <h1 className="text-center">
         Oops!

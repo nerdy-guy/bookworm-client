@@ -7,7 +7,7 @@ const AuthProvider = ({ children }) => {
     () => JSON.parse(localStorage.getItem("user")) || null
   );
 
-  const login = async (data, setErrorMessage) => {
+  const login = async (data, setErrorMessage, reset) => {
     const res = await fetch("http://localhost:3000/api/auth/login", {
       method: "POST",
       headers: {
@@ -22,7 +22,8 @@ const AuthProvider = ({ children }) => {
     setUser(json);
 
     if (res.status === 401) {
-      setErrorMessage(json);
+      setErrorMessage(json.error);
+      reset({ password: "" });
     }
   };
 
