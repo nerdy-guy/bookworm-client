@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createContext, useState } from "react";
 import Loader from "../components/Loader";
+import NotFound from "../pages/NotFound";
 
 const BookContext = createContext();
 
@@ -17,6 +18,7 @@ const BookProvider = ({ children }) => {
 
         return res.json();
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error);
       }
     },
@@ -34,13 +36,14 @@ const BookProvider = ({ children }) => {
         prevBooks.filter((book) => book.book_id !== book_id)
       );
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   };
 
   if (isLoading) return <Loader />;
 
-  if (error) return "An error has occurred: " + error.message;
+  if (error) return <NotFound />;
 
   return (
     <BookContext.Provider value={{ books, deleteBook }}>

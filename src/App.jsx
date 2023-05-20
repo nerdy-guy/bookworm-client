@@ -9,8 +9,11 @@ import Layout from "./components/Layout";
 import Stats from "./pages/Stats";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthContext } from "./contexts/AuthContext";
 
 const App = () => {
+  const { user } = useContext(AuthContext);
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -26,11 +29,11 @@ const App = () => {
         },
         {
           path: "/register",
-          element: <Register />,
+          element: user?.user_id ? <Home /> : <Register />,
         },
         {
           path: "/login",
-          element: <Login />,
+          element: user?.user_id ? <Home /> : <Login />,
         },
         {
           path: "/:id",

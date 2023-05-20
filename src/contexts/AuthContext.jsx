@@ -27,7 +27,6 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // TODO: Look for local storage alternative
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);

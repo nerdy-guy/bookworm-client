@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import bookCover from "../assets/book-cover-placeholder.png";
 import Loader from "../components/Loader";
+import NotFound from "./NotFound";
 
 const Book = () => {
   const [book, setBook] = useState([]);
@@ -23,35 +24,40 @@ const Book = () => {
 
       return res.json();
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   };
 
-  const {
-    title,
-    author,
-    image_url,
-    pages,
-    start_date,
-    end_date,
-    review,
-    notes,
-  } = book;
+  const { title, author, image_url, pages, end_date, review, notes } = book;
 
   if (isLoading) return <Loader />;
 
-  if (isError) return "An error has occurred: " + isError.message;
+  if (isError) return <NotFound />;
 
   return (
-    <div className="min-h-screen bg-[#fbf1c7] text-[#282828] dark:bg-[#282828] dark:text-[#ebdbb2]">
-      <img src={image_url || bookCover} alt={title} className="h-auto w-16" />
-      <h2>{title}</h2>
-      <h3>{author}</h3>
-      <pre className="whitespace-pre-wrap break-words">{review}</pre>
-      <pre className="whitespace-pre-wrap  break-words">{notes}</pre>
-      <p>{pages}</p>
-      <time className="block">{start_date}</time>
-      <time>{end_date}</time>
+    <div className="min-h-screen w-full bg-[#fbf1c7] text-[#282828] dark:bg-[#282828] dark:text-[#ebdbb2]">
+      <div className="mx-auto flex max-w-[90%] flex-col gap-8 py-4 pt-8">
+        <img src={image_url || bookCover} alt={title} className="h-auto w-52" />
+        <div className="flex flex-col gap-4">
+          <h1 className="text-2xl font-bold">
+            {title} <span className="text-xl font-normal">({end_date})</span>
+          </h1>
+          <h3 className="text-xl font-thin">{author}</h3>
+
+          <p>{pages} Pages</p>
+        </div>
+        <div className="max-w-5xl">
+          <pre className="whitespace-pre-wrap break-words">
+            <span className="font-semibold">Review: </span>
+            {review}
+          </pre>
+          <pre className="mt-12 whitespace-pre-wrap break-words border-t-2 border-dashed border-[#ebdbb2] pt-12">
+            <span className="font-semibold">Notes: </span>
+            {notes}
+          </pre>
+        </div>
+      </div>
     </div>
   );
 };

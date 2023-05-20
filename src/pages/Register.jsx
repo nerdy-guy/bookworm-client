@@ -14,8 +14,8 @@ const schema = z.object({
   email: z.string().email(),
   password: z
     .string()
-    .min(6, { message: "Password must be between 6 and 255 characters" })
-    .max(255, { message: "Password must be between 6 and 255 characters" }),
+    .min(8, { message: "Password must be between 8 and 255 characters" })
+    .max(255, { message: "Password must be between 8 and 255 characters" }),
 });
 
 const Register = () => {

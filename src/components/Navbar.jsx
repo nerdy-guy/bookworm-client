@@ -36,18 +36,18 @@ const Navbar = () => {
   ];
 
   const handleLogout = async () => {
-    try {
-      const res = await fetch("http://localhost:3000/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
+    localStorage.removeItem("user");
 
-      const data = await res.json();
+    // try {
+    //   await fetch("http://localhost:3000/api/auth/logout", {
+    //     method: "POST",
+    //     credentials: "include",
+    //   });
 
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
+    //   navigate("/login");
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   const toggleNav = () => {
@@ -80,7 +80,7 @@ const Navbar = () => {
             )}
           </button>
           {user?.user_id ? (
-            <button>Logout</button>
+            <button onClick={handleLogout}>Logout</button>
           ) : (
             <>
               <Link to="/login">login</Link>{" "}
@@ -134,7 +134,8 @@ const Navbar = () => {
                   <button onClick={handleLogout}>Logout</button>
                 ) : (
                   <>
-                    <button>Login</button> <button>Register</button>
+                    <Link to="/login">Login</Link>{" "}
+                    <Link to="/register">Register</Link>
                   </>
                 )}
               </ul>
