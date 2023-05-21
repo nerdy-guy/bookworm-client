@@ -1,6 +1,12 @@
 import { useForm } from "react-hook-form";
+import { useContext } from "react";
+import { BookContext } from "../contexts/BookContext";
+import { ThemeContext } from "../contexts/ThemeContext";
+import { createPortal } from "react-dom";
 
-const BookForm = () => {
+const BookForm = ({ closeModal }) => {
+  const { setBooks } = useContext(BookContext);
+
   const {
     register,
     handleSubmit,
@@ -18,151 +24,100 @@ const BookForm = () => {
     formData.append("image_url", data.image_url[0]);
 
     try {
-      await fetch("http://localhost:3000/api/books", {
+      const res = await fetch("http://localhost:3000/api/books", {
         method: "POST",
         body: formData,
         credentials: "include",
       });
+
+      const newBook = await res.json();
+
+      setBooks((prevBooks) => [...prevBooks, newBook]);
+      closeModal();
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
     }
   };
 
-  return (
-    <form onSubmit={handleSubmit(addBook)} className="pt-12">
-      <label
-        htmlFor="my-modal-4"
-        className="mt-16 rounded border-none bg-[#709c13] p-2 px-12 text-[#f9f5d7] opacity-80 ring-inset duration-700 hover:opacity-100 focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#83a598] dark:bg-[#517d13] dark:text-[#ebdbb2]"
+  const { theme } = useContext(ThemeContext);
+
+  return createPortal(
+    <div className={theme === "dark" ? "dark" : "light"}>
+      <form
+        className="fixed inset-0 z-40 m-4 mx-auto flex w-[90%] flex-col rounded bg-[#f9f5d7] p-4 text-left text-[#282828] dark:bg-[#1d2021] dark:text-[#ebdbb2] md:w-[50%] md:gap-1 md:p-8"
+        onSubmit={handleSubmit(addBook)}
       >
-        Add Book
-      </label>
+        <label htmlFor="title">Title</label>
+        <input
+          type="text"
+          id="title"
+          {...register("title", { required: "Title is required" })}
+          placeholder="Book Title"
+          className="rounded border-none bg-gray-50 p-1 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:outline-none  focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#458588] dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+        />
+        <p className="text-[#cc241d]">{errors?.title?.message}</p>
 
-      <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-      <label htmlFor="my-modal-4" className="modal cursor-pointer">
-        <div className="modal-box relative z-50 rounded bg-[#f9f5d7] text-left text-[#282828] dark:bg-[#1d2021] dark:text-[#ebdbb2]">
-          <div className="px-6 py-6 lg:px-8">
-            <div className="space-y-6">
-              <div>
-                <label
-                  htmlFor="title"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Title
-                </label>
-                <input
-                  type="text"
-                  id="title"
-                  {...register("title")}
-                  placeholder="Book Title"
-                  className="block w-full rounded border-none bg-gray-50 p-1 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:outline-none  focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#458588] dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                />
-              </div>
-              <p>{errors?.title}</p>
+        <label htmlFor="author">Author</label>
+        <input
+          type="text"
+          id="author"
+          placeholder="Author"
+          {...register("author", { required: "Author is required" })}
+          className="rounded border-none bg-gray-50 p-1 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:outline-none  focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#458588] dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+        />
+        <p className="text-[#cc241d]">{errors?.author?.message}</p>
 
-              <div>
-                <label
-                  htmlFor="author"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Author
-                </label>
-                <input
-                  type="text"
-                  id="author"
-                  placeholder="Author"
-                  {...register("author")}
-                  className="block w-full rounded border-none bg-gray-50 p-1 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:outline-none  focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#458588] dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                />
-              </div>
+        <label htmlFor="image_url">Book Cover</label>
+        <input type="file" name="image_url" {...register("image_url")} />
 
-              <div>
-                <label
-                  htmlFor="image_url"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Book Cover
-                </label>
-                <input
-                  type="file"
-                  name="image_url"
-                  {...register("image_url")}
-                  className="block w-full rounded border-none bg-gray-50 p-1 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:outline-none  focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#458588] dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                />
-              </div>
+        <label htmlFor="pages">Pages</label>
+        <input
+          type="number"
+          id="pages"
+          placeholder="Number of pages"
+          {...register("pages")}
+          className="rounded border-none bg-gray-50 p-1 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:outline-none  focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#458588] dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+        />
 
-              <div>
-                <label
-                  htmlFor="pages"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Pages
-                </label>
-                <input
-                  type="number"
-                  id="pages"
-                  placeholder="Number of pages"
-                  {...register("pages")}
-                  className="block w-full rounded border-none bg-gray-50 p-1 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:outline-none  focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#458588] dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                />
-              </div>
+        <label htmlFor="endDate">End Date</label>
+        <input
+          type="date"
+          id="endDate"
+          {...register("endDate")}
+          className="rounded border-none bg-gray-50 p-1 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:outline-none  focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#458588] dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+        />
 
-              <div>
-                <label
-                  htmlFor="endDate"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  End Date
-                </label>
-                <input
-                  type="date"
-                  id="endDate"
-                  {...register("endDate")}
-                  className="block w-full rounded border-none bg-gray-50 p-1 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:outline-none  focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#458588] dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                />
-              </div>
+        <label htmlFor="review">Review</label>
+        <textarea
+          id="review"
+          rows="5"
+          {...register("review")}
+          className="rounded border-none bg-gray-50 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:outline-none  focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#458588] dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+        />
 
-              <div>
-                <label
-                  htmlFor="notes"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Notes
-                </label>
-                <textarea
-                  id="notes"
-                  rows="5"
-                  {...register("notes")}
-                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
-                />
-              </div>
+        <label htmlFor="notes">Notes</label>
+        <textarea
+          id="notes"
+          rows="5"
+          {...register("notes")}
+          className="rounded border-none bg-gray-50 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:outline-none  focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#458588] dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+        />
 
-              <div>
-                <label
-                  htmlFor="review"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Review
-                </label>
-                <textarea
-                  id="review"
-                  rows="5"
-                  {...register("review")}
-                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full rounded-lg bg-[#709c13] px-5 py-2.5 text-center text-sm font-medium text-white opacity-80 hover:opacity-100 focus:outline-none focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#83a598] dark:bg-[#517d13]"
-              >
-                Add
-              </button>
-            </div>
-          </div>
+        <div className="mt-auto self-end pt-4">
+          <button className="mr-8" onClick={closeModal} type="button">
+            Cancel
+          </button>
+          <button
+            className="bg-[#709c13] px-4 py-1 text-[#f9f5d7] dark:bg-[#517d13] dark:text-[#ebdbb2]"
+            type="submit"
+          >
+            Save
+          </button>
         </div>
-      </label>
-    </form>
+      </form>
+    </div>,
+    document.getElementById("modal")
   );
 };
 

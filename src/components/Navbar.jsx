@@ -4,7 +4,7 @@ import { HiXMark } from "react-icons/hi2";
 import { HiMenu } from "react-icons/hi";
 import { ThemeContext } from "../contexts/ThemeContext";
 import logo from "../assets/worm.svg";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
 const Navbar = () => {
@@ -12,42 +12,19 @@ const Navbar = () => {
   const [showNav, setShowNav] = useState(false);
   const { user } = useContext(AuthContext);
 
-  const navItems = [
-    {
-      id: 1,
-      title: "Currently Reading",
-      path: "currentlyreading",
-    },
-    {
-      id: 2,
-      title: "To Read",
-      path: "toread",
-    },
-    {
-      id: 3,
-      title: "Read",
-      path: "read",
-    },
-    {
-      id: 4,
-      title: "Stats",
-      path: "stats",
-    },
-  ];
-
   const handleLogout = async () => {
     localStorage.removeItem("user");
 
-    // try {
-    //   await fetch("http://localhost:3000/api/auth/logout", {
-    //     method: "POST",
-    //     credentials: "include",
-    //   });
+    try {
+      await fetch("http://localhost:3000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
 
-    //   navigate("/login");
-    // } catch (error) {
-    //   console.error(error);
-    // }
+      window.location.href = "http://localhost:5173/login";
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const toggleNav = () => {
@@ -64,14 +41,6 @@ const Navbar = () => {
 
         {/* Desktop Navbar */}
         <div className="hidden items-center gap-4 md:flex">
-          <ul className="flex flex-row gap-8">
-            {user?.user_id &&
-              navItems.map((navItem) => (
-                <li key={navItem.id}>
-                  <NavLink to={navItem.path}>{navItem.title}</NavLink>
-                </li>
-              ))}
-          </ul>
           <button onClick={toggleTheme}>
             {theme === "light" ? (
               <BsFillMoonFill className="h-6 w-6" title="Switch to dark mode" />
@@ -123,13 +92,6 @@ const Navbar = () => {
 
             {showNav ? (
               <ul className="absolute right-0 z-50 mt-4 flex w-full flex-col items-center gap-8 p-8 opacity-80 dark:bg-[#1d2021]">
-                {user?.user_id &&
-                  navItems.map((navItem) => (
-                    <li key={navItem.id}>
-                      <NavLink to={navItem.path}>{navItem.title}</NavLink>
-                    </li>
-                  ))}
-
                 {user?.user_id ? (
                   <button onClick={handleLogout}>Logout</button>
                 ) : (

@@ -17,10 +17,10 @@ const schema = z.object({
 
 const Login = () => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const { login } = useContext(AuthContext);
   const [isVisible, toggleVisibility] = useToggle();
-  const navigate = useNavigate();
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -42,6 +42,7 @@ const Login = () => {
       setErrorMessage(error);
     }
   };
+
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center bg-[#fbf1c7] text-[#282828] dark:bg-[#282828] dark:text-[#ebdbb2]">
       <div className="flex w-full flex-col items-center">

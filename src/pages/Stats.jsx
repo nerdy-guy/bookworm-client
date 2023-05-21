@@ -5,10 +5,13 @@ const Stats = () => {
   const { books } = useContext(BookContext);
 
   return (
-    <div className="min-h-screen bg-[#fbf1c7] pt-32 text-center text-[#282828] dark:bg-[#282828] dark:text-[#ebdbb2]">
-      <p>Books Read: {books.length}</p>
+    <div className="pl-8 pt-4 text-left text-[#282828] dark:text-[#ebdbb2]">
       <p>
-        Pages Read:{" "}
+        <span className="font-bold">Books Read: </span>
+        {books.length}
+      </p>
+      <p>
+        <span className="font-bold">Pages Read: </span>
         {books
           .map((book) => book.pages)
           .reduce((accu, value) => accu + value, 0)}

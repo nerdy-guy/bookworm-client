@@ -8,20 +8,23 @@ const BookContext = createContext();
 const BookProvider = ({ children }) => {
   const [books, setBooks] = useState([]);
 
+  const getBooks = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/books", {
+        credentials: "include",
+      });
+
+      const data = res.json();
+
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const { isLoading, error } = useQuery({
     queryKey: ["books"],
-    queryFn: async () => {
-      try {
-        const res = await fetch("http://localhost:3000/api/books", {
-          credentials: "include",
-        });
-
-        return res.json();
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
-    },
+    queryFn: getBooks,
     onSuccess: (data) => setBooks(data),
   });
 
@@ -46,7 +49,7 @@ const BookProvider = ({ children }) => {
   if (error) return <NotFound />;
 
   return (
-    <BookContext.Provider value={{ books, deleteBook }}>
+    <BookContext.Provider value={{ books, deleteBook, getBooks, setBooks }}>
       {children}
     </BookContext.Provider>
   );
