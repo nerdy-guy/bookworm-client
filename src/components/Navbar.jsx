@@ -4,24 +4,27 @@ import { HiXMark } from "react-icons/hi2";
 import { HiMenu } from "react-icons/hi";
 import { ThemeContext } from "../contexts/ThemeContext";
 import logo from "../assets/worm.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
 const Navbar = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [showNav, setShowNav] = useState(false);
-  const { user } = useContext(AuthContext);
+  const { isAuth, setIsAuth } = useContext(AuthContext);
+
+  const navigate = useNavigate("");
 
   const handleLogout = async () => {
-    localStorage.removeItem("user");
-
     try {
-      await fetch("http://localhost:3000/api/auth/logout", {
+      const res = await fetch("http://localhost:3000/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });
 
-      window.location.href = "http://localhost:5173/login";
+      if (res.ok) {
+        setIsAuth(false);
+        navigate("/login");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -48,7 +51,7 @@ const Navbar = () => {
               <BsFillSunFill className="h-6 w-6" title="Switch to light mode" />
             )}
           </button>
-          {user?.user_id ? (
+          {isAuth ? (
             <button onClick={handleLogout}>Logout</button>
           ) : (
             <>
@@ -92,7 +95,7 @@ const Navbar = () => {
 
             {showNav ? (
               <ul className="absolute right-0 z-50 mt-4 flex w-full flex-col items-center gap-8 p-8 opacity-80 dark:bg-[#1d2021]">
-                {user?.user_id ? (
+                {isAuth ? (
                   <button onClick={handleLogout}>Logout</button>
                 ) : (
                   <>

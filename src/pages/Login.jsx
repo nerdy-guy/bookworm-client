@@ -16,7 +16,7 @@ const schema = z.object({
 });
 
 const Login = () => {
-  const { user } = useContext(AuthContext);
+  const { isAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const { login } = useContext(AuthContext);
@@ -33,9 +33,9 @@ const Login = () => {
 
   const handleLogin = async (data) => {
     try {
-      login(data, setErrorMessage, reset);
+      await login(data, setErrorMessage, reset);
 
-      if (user?.user_id) {
+      if (isAuth) {
         navigate("/");
       }
     } catch (error) {

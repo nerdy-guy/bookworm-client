@@ -6,13 +6,14 @@ import { useContext } from "react";
 import { ThemeContext } from "./contexts/ThemeContext";
 import Book from "./pages/Book";
 import Layout from "./components/Layout";
-import Stats from "./pages/Stats";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthContext } from "./contexts/AuthContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const App = () => {
-  const { user } = useContext(AuthContext);
+  const { isAuth } = useContext(AuthContext);
+  const { theme } = useContext(ThemeContext);
 
   const router = createBrowserRouter([
     {
@@ -23,25 +24,27 @@ const App = () => {
           path: "/",
           element: (
             <ProtectedRoute>
-              <Home />
+              <ErrorBoundary>
+                <Home />
+              </ErrorBoundary>
             </ProtectedRoute>
           ),
         },
         {
           path: "/register",
-          element: user?.user_id ? <Home /> : <Register />,
+          element: isAuth ? <Home /> : <Register />,
         },
         {
           path: "/login",
-          element: user?.user_id ? <Home /> : <Login />,
+          element: isAuth ? <Home /> : <Login />,
         },
         {
           path: "/:id",
-          element: <Book />,
-        },
-        {
-          path: "/stats",
-          element: <Stats />,
+          element: (
+            <ErrorBoundary>
+              <Book />
+            </ErrorBoundary>
+          ),
         },
       ],
     },
@@ -50,8 +53,6 @@ const App = () => {
       element: <NotFound />,
     },
   ]);
-
-  const { theme } = useContext(ThemeContext);
 
   return (
     <div className={theme === "dark" ? "dark" : "light"}>

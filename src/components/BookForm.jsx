@@ -1,12 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useContext } from "react";
-import { BookContext } from "../contexts/BookContext";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { createPortal } from "react-dom";
 
-const BookForm = ({ closeModal }) => {
-  const { setBooks } = useContext(BookContext);
-
+const BookForm = ({ closeModal, setBooks }) => {
   const {
     register,
     handleSubmit,

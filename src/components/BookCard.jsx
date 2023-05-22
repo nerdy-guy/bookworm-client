@@ -4,16 +4,37 @@ import { IoEyeOutline } from "react-icons/io5";
 import { BiEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import bookCover from "../assets/book-cover-placeholder.png";
-import { Fragment, useContext } from "react";
+import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import { BookContext } from "../contexts/BookContext";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const BookCard = ({ book_id, title, image_url, author, pages, endDate }) => {
-  const { deleteBook } = useContext(BookContext);
+const BookCard = ({
+  book_id,
+  title,
+  image_url,
+  author,
+  pages,
+  endDate,
+  setBooks,
+}) => {
+  const deleteBook = async (book_id) => {
+    try {
+      await fetch(`http://localhost:3000/api/books/${book_id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      setBooks((prevBooks) =>
+        prevBooks.filter((book) => book.book_id !== book_id)
+      );
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  };
 
   return (
     <div className="relative flex w-80 justify-between gap-4 rounded  border-2 border-l-0 bg-[#f9f5d7] text-left text-[#282828] dark:bg-[#1d2021] dark:text-[#ebdbb2]">

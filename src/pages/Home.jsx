@@ -1,17 +1,47 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import BookCard from "../components/BookCard";
 import BookForm from "../components/BookForm";
-import { BookContext } from "../contexts/BookContext";
 import Stats from "./Stats";
 import { RiBook2Fill } from "react-icons/ri";
+import Loader from "../components/Loader";
+import { useQuery } from "@tanstack/react-query";
+import NotFound from "./NotFound";
 
 const Home = () => {
-  const { books } = useContext(BookContext);
   const [showModal, setShowModal] = useState(false);
 
   const handleModal = () => setShowModal(true);
 
   const closeModal = () => setShowModal(false);
+
+  const [books, setBooks] = useState([]);
+
+  const getBooks = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/books", {
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch books.");
+      }
+
+      const data = await res.json();
+
+      return data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
+  const { isLoading, error } = useQuery(["books"], getBooks, {
+    onSuccess: (data) => setBooks(data),
+  });
+
+  if (isLoading) return <Loader />;
+
+  if (error) return <NotFound />;
 
   return (
     <main className="min-h-screen bg-[#fbf1c7] text-center dark:bg-[#282828]">
@@ -24,12 +54,13 @@ const Home = () => {
         </span>
       </button>
 
-      {showModal && <BookForm closeModal={closeModal} />}
-      <Stats />
+      {showModal && <BookForm closeModal={closeModal} setBooks={setBooks} />}
+      <Stats books={books} />
 
       <div className="mx-auto mt-8 grid grid-cols-1 justify-items-center gap-8 last-of-type:pb-16 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-        {books.length > 0 &&
-          books?.map((book) => <BookCard key={book?.book_id} {...book} />)}
+        {books?.map((book) => (
+          <BookCard key={book?.book_id} {...book} setBooks={setBooks} />
+        ))}
       </div>
     </main>
   );

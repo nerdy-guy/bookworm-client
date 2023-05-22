@@ -1,20 +1,16 @@
-import { useContext } from "react";
-import { BookContext } from "../contexts/BookContext";
-
-const Stats = () => {
-  const { books } = useContext(BookContext);
-
+const Stats = ({ books }) => {
   return (
-    <div className="pl-8 pt-4 text-left text-[#282828] dark:text-[#ebdbb2]">
+    <div className="mx-auto max-w-[90%] pt-4 text-left text-[#282828]  dark:text-[#ebdbb2]">
       <p>
         <span className="font-bold">Books Read: </span>
-        {books.length}
+        {books?.length}
       </p>
       <p>
         <span className="font-bold">Pages Read: </span>
-        {books
-          .map((book) => book.pages)
-          .reduce((accu, value) => accu + value, 0)}
+        {books?.length > 0 &&
+          books
+            ?.map((book) => book.pages)
+            ?.reduce((accu, value) => accu + value, 0)}
       </p>
     </div>
   );
