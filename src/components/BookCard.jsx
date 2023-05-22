@@ -4,8 +4,9 @@ import { IoEyeOutline } from "react-icons/io5";
 import { BiEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import bookCover from "../assets/book-cover-placeholder.png";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
+import EditBookModal from "./EditBookModal";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -18,8 +19,16 @@ const BookCard = ({
   author,
   pages,
   endDate,
+  review,
+  notes,
   setBooks,
 }) => {
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  const handleEditModal = () => setShowEditModal(true);
+
+  const closeEditModal = () => setShowEditModal(false);
+
   const deleteBook = async (book_id) => {
     try {
       await fetch(`http://localhost:3000/api/books/${book_id}`, {
@@ -87,6 +96,7 @@ const BookCard = ({
                     className={classNames(
                       "flex w-full items-center gap-2 px-4 py-4 hover:bg-gray-200 dark:hover:bg-gray-600"
                     )}
+                    onClick={handleEditModal}
                   >
                     <BiEdit />
                     Edit
@@ -110,6 +120,21 @@ const BookCard = ({
           </Menu.Items>
         </Transition>
       </Menu>
+
+      {showEditModal && (
+        <EditBookModal
+          closeEditModal={closeEditModal}
+          setBooks={setBooks}
+          book_id={book_id}
+          title={title}
+          author={author}
+          image_url={image_url}
+          pages={pages}
+          review={review}
+          notes={notes}
+          endDate={endDate}
+        />
+      )}
     </div>
   );
 };

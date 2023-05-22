@@ -41,21 +41,28 @@ const Book = () => {
         <img src={image_url || bookCover} alt={title} className="h-auto w-52" />
         <div className="flex flex-col gap-4">
           <h1 className="text-2xl font-bold">
-            {title} <span className="text-xl font-normal">({end_date})</span>
+            {title}{" "}
+            {end_date && (
+              <span className="text-xl font-normal">({end_date})</span>
+            )}
           </h1>
           <h3 className="text-xl font-thin">{author}</h3>
 
-          <p>{pages} Pages</p>
+          {pages && <p>{pages} Pages</p>}
         </div>
         <div className="max-w-5xl">
-          <pre className="whitespace-pre-wrap break-words">
-            <span className="font-semibold">Review: </span>
-            {review}
-          </pre>
-          <pre className="mt-12 whitespace-pre-wrap break-words border-t-2 border-dashed border-[#ebdbb2] pt-12">
-            <span className="font-semibold">Notes: </span>
-            {notes}
-          </pre>
+          {review && (
+            <pre className="whitespace-pre-wrap break-words">
+              <span className="font-semibold">Review: </span>
+              {review}
+            </pre>
+          )}
+          {notes && (
+            <pre className="mt-12 whitespace-pre-wrap break-words border-t-2 border-dashed border-[#ebdbb2] pt-12">
+              <span className="font-semibold">Notes: </span>
+              {notes}
+            </pre>
+          )}
         </div>
       </div>
     </div>

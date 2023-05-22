@@ -5,12 +5,13 @@ const Stats = ({ books }) => {
         <span className="font-bold">Books Read: </span>
         {books?.length}
       </p>
+
       <p>
         <span className="font-bold">Pages Read: </span>
         {books?.length > 0 &&
           books
             ?.map((book) => book.pages)
-            ?.reduce((accu, value) => accu + value, 0)}
+            ?.reduce((accu, value) => accu + value)}
       </p>
     </div>
   );

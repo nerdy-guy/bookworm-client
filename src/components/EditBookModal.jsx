@@ -1,38 +1,40 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { createPortal } from "react-dom";
 
-const BookForm = ({ closeModal, setBooks }) => {
+const EditBookModal = ({
+  closeEditModal,
+  setBooks,
+  book_id,
+  title,
+  author,
+  pages,
+  endDate,
+  review,
+  notes,
+}) => {
   const { theme } = useContext(ThemeContext);
-
-  const bookSchema = z.object({
-    title: z
-      .string()
-      .nonempty({ message: "Title is required" })
-      .max(255, { message: "Title must be less than 255 characters" }),
-    author: z
-      .string()
-      .nonempty({ message: "Author is required" })
-      .max(255, { message: "Author must be less than 255 characters" }),
-    pages: z.number({
-      required_error: "Pages is required",
-      invalid_type_error: "Pages is required",
-    }),
-    endDate: z.string().optional(),
-    review: z.string().optional(),
-    notes: z.string().optional(),
-  });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(bookSchema) });
+    setValue,
+  } = useForm();
 
-  const addBook = async (data) => {
+  console.log(errors);
+
+  useEffect(() => {
+    setValue("title", title);
+    setValue("author", author);
+    setValue("pages", pages);
+    setValue("endDate", endDate);
+    setValue("review", review);
+    setValue("notes", notes);
+  }, [author, endDate, notes, pages, review, setValue, title]);
+
+  const editBook = async (data) => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("author", data.author);
@@ -45,16 +47,25 @@ const BookForm = ({ closeModal, setBooks }) => {
     console.log(data);
 
     try {
-      const res = await fetch("http://localhost:3000/api/books", {
-        method: "POST",
+      const res = await fetch(`http://localhost:3000/api/books/${book_id}`, {
+        method: "PUT",
         body: formData,
         credentials: "include",
       });
 
-      const newBook = await res.json();
+      const editedBook = await res.json();
 
-      setBooks((prevBooks) => [...prevBooks, newBook]);
-      closeModal();
+      setBooks((prevBooks) => {
+        const updatedBooks = prevBooks.map((prevBook) => {
+          if (prevBook.book_id === editedBook.book_id) {
+            return editedBook;
+          }
+          return prevBook;
+        });
+        return updatedBooks;
+      });
+
+      closeEditModal();
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -65,7 +76,7 @@ const BookForm = ({ closeModal, setBooks }) => {
     <div className={theme === "dark" ? "dark" : "light"}>
       <form
         className="fixed inset-0 z-40 m-4 mx-auto flex w-[90%] flex-col rounded bg-[#f9f5d7] p-4 text-left text-[#282828] dark:bg-[#1d2021] dark:text-[#ebdbb2] md:w-[50%] md:gap-1 md:p-8"
-        onSubmit={handleSubmit(addBook)}
+        onSubmit={handleSubmit(editBook)}
       >
         <label htmlFor="title">Title</label>
         <input
@@ -85,7 +96,6 @@ const BookForm = ({ closeModal, setBooks }) => {
           {...register("author")}
           className="rounded border-none bg-gray-50 p-1 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:outline-none  focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#458588] dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
         />
-        <p className="text-[#cc241d]">{errors?.author?.message}</p>
 
         <label htmlFor="image_url">Book Cover</label>
         <input type="file" name="image_url" {...register("image_url")} />
@@ -98,7 +108,6 @@ const BookForm = ({ closeModal, setBooks }) => {
           {...register("pages", { valueAsNumber: true })}
           className="rounded border-none bg-gray-50 p-1 text-gray-900 ring-1 ring-inset placeholder:text-gray-400 focus:outline-none  focus:outline-transparent focus:ring-2 focus:ring-inset focus:ring-[#458588] dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
         />
-        <p className="text-[#cc241d]">{errors?.pages?.message}</p>
 
         <label htmlFor="endDate">End Date</label>
         <input
@@ -125,7 +134,7 @@ const BookForm = ({ closeModal, setBooks }) => {
         />
 
         <div className="mt-auto self-end pt-4">
-          <button className="mr-8" onClick={closeModal} type="button">
+          <button className="mr-8" onClick={closeEditModal} type="button">
             Cancel
           </button>
           <button
@@ -137,8 +146,8 @@ const BookForm = ({ closeModal, setBooks }) => {
         </div>
       </form>
     </div>,
-    document.getElementById("modal")
+    document.getElementById("edit-modal")
   );
 };
 
-export default BookForm;
+export default EditBookModal;
