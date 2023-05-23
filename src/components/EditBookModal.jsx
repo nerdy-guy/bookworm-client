@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useContext, useEffect } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { createPortal } from "react-dom";
+import { NODE_ENV } from "../utils/configs";
 
 const EditBookModal = ({
   closeEditModal,
@@ -23,8 +24,6 @@ const EditBookModal = ({
     setValue,
   } = useForm();
 
-  console.log(errors);
-
   useEffect(() => {
     setValue("title", title);
     setValue("author", author);
@@ -44,14 +43,17 @@ const EditBookModal = ({
     formData.append("review", data.review);
     formData.append("image_url", data.image_url && data.image_url[0]);
 
-    console.log(data);
-
     try {
-      const res = await fetch(`http://localhost:3000/api/books/${book_id}`, {
-        method: "PUT",
-        body: formData,
-        credentials: "include",
-      });
+      const res = await fetch(
+        NODE_ENV === "production"
+          ? `https://ahmedarafah.com/api/books/${book_id}`
+          : `http://localhost:3000/api/books/${book_id}`,
+        {
+          method: "PUT",
+          body: formData,
+          credentials: "include",
+        }
+      );
 
       const editedBook = await res.json();
 

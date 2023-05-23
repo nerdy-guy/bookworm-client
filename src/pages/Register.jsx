@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import useToggle from "../hooks/useToggle";
 import { useState } from "react";
+import { NODE_ENV } from "../utils/configs";
 
 const schema = z.object({
   name: z
@@ -31,14 +32,19 @@ const Register = () => {
 
   const handleRegister = async (data) => {
     try {
-      const res = await fetch("http://localhost:3000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
+      const res = await fetch(
+        NODE_ENV === "production"
+          ? "https://ahmedarafah.com/api/auth/register"
+          : "http://localhost:3000/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+          credentials: "include",
+        }
+      );
 
       const json = await res.json();
 

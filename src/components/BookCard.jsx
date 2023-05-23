@@ -6,6 +6,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import EditBookModal from "./EditBookModal";
+import { NODE_ENV } from "../utils/configs";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -30,10 +31,15 @@ const BookCard = ({
 
   const deleteBook = async (book_id) => {
     try {
-      await fetch(`http://localhost:3000/api/books/${book_id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      await fetch(
+        NODE_ENV === "production"
+          ? `https://ahmedarafah.com/api/books/${book_id}`
+          : `http://localhost:3000/api/books/${book_id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
 
       setBooks((prevBooks) =>
         prevBooks.filter((book) => book.book_id !== book_id)
@@ -48,15 +54,21 @@ const BookCard = ({
     <div className="relative flex w-80 justify-between gap-4 rounded  border-2 border-l-0 bg-[#f9f5d7] text-left text-[#282828] dark:bg-[#1d2021] dark:text-[#ebdbb2]">
       <Link to={`/${book_id}`}>
         <img
-          src={`http://localhost:3000/public/${
-            image_url || "book-cover-placeholder.png"
-          }`}
+          src={
+            NODE_ENV === "production"
+              ? `https://ahmedarafah.com/public/${
+                  image_url || "book-cover-placeholder.png"
+                }`
+              : `http://localhost:3000/public/${
+                  image_url || "book-cover-placeholder.png"
+                }`
+          }
           alt=""
-          className="h-40 w-56"
+          className="h-52 w-56 max-w-[9rem]"
         />
       </Link>
 
-      <div className="relative flex flex-col gap-1 pr-8 pt-2">
+      <div className="flex flex-col gap-1 pr-8 pt-2">
         <p className="w-full">{title}</p>
         <small>{author}</small>
         <p>{pages}</p>
@@ -65,7 +77,7 @@ const BookCard = ({
 
       <Menu as="div" className="relative inline-block text-left">
         <div>
-          <Menu.Button className="px-3 py-2">
+          <Menu.Button className="class absolute right-0 px-3 py-4">
             <BsThreeDotsVertical className="h-6 w-6" aria-hidden="true" />
           </Menu.Button>
         </div>
@@ -79,7 +91,7 @@ const BookCard = ({
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 z-10 w-56 origin-top-right rounded-md bg-white shadow ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-700 dark:text-white">
+          <Menu.Items className="absolute right-0 z-10 w-40 origin-top-right rounded-md bg-white shadow ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-700 dark:text-white">
             <div className="py-1">
               <Menu.Item>
                 {() => (

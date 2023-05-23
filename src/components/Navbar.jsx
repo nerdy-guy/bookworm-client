@@ -6,6 +6,7 @@ import { ThemeContext } from "../contexts/ThemeContext";
 import logo from "../assets/worm.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
+import { NODE_ENV } from "../utils/configs";
 
 const Navbar = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -16,10 +17,15 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
+      const res = await fetch(
+        NODE_ENV === "production"
+          ? "https://ahmedarafah.com/api/auth/logout"
+          : "http://localhost:3000/api/auth/logout",
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
 
       if (res.ok) {
         setIsAuth(false);

@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import Loader from "../components/Loader";
+import { NODE_ENV } from "../utils/configs";
 
 const AuthContext = createContext();
 
@@ -9,14 +10,19 @@ const AuthProvider = ({ children }) => {
 
   const login = async (data, setErrorMessage, reset) => {
     try {
-      const res = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
+      const res = await fetch(
+        NODE_ENV === "production"
+          ? "https://ahmedarafah.com/api/auth/login"
+          : "http://localhost:3000/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+          credentials: "include",
+        }
+      );
 
       const json = await res.json();
 
@@ -35,9 +41,14 @@ const AuthProvider = ({ children }) => {
 
   const getUser = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/auth", {
-        credentials: "include",
-      });
+      const res = await fetch(
+        NODE_ENV === "production"
+          ? "https://ahmedarafah.com/api/auth"
+          : "http://localhost:3000/api/auth",
+        {
+          credentials: "include",
+        }
+      );
 
       const { accessToken } = await res.json();
 

@@ -6,6 +6,7 @@ import { RiBook2Fill } from "react-icons/ri";
 import Loader from "../components/Loader";
 import { useQuery } from "@tanstack/react-query";
 import NotFound from "./NotFound";
+import { NODE_ENV } from "../utils/configs";
 
 const Home = () => {
   const [showModal, setShowModal] = useState(false);
@@ -18,9 +19,14 @@ const Home = () => {
 
   const getBooks = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/books", {
-        credentials: "include",
-      });
+      const res = await fetch(
+        NODE_ENV === "production"
+          ? "http://ahmedarafah.com/api/books"
+          : "http://localhost:3000/api/books",
+        {
+          credentials: "include",
+        }
+      );
 
       if (!res.ok) {
         throw new Error("Failed to fetch books.");

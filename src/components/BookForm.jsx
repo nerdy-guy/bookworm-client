@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { createPortal } from "react-dom";
+import { NODE_ENV } from "../utils/configs";
 
 const BookForm = ({ closeModal, setBooks }) => {
   const { theme } = useContext(ThemeContext);
@@ -43,14 +44,17 @@ const BookForm = ({ closeModal, setBooks }) => {
     formData.append("review", data.review);
     formData.append("image_url", data.image_url && data.image_url[0]);
 
-    console.log(data);
-
     try {
-      const res = await fetch("http://localhost:3000/api/books", {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      });
+      const res = await fetch(
+        NODE_ENV === "production"
+          ? "https://ahmedarafah.com/api/books"
+          : "http://localhost:3000/api/books",
+        {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        }
+      );
 
       const newBook = await res.json();
 

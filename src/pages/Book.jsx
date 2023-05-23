@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import NotFound from "./NotFound";
+import { NODE_ENV } from "../utils/configs";
 
 const Book = () => {
   const [book, setBook] = useState([]);
@@ -13,9 +14,14 @@ const Book = () => {
 
   const getBook = async (id) => {
     try {
-      const res = await fetch(`http://localhost:3000/api/books/${id}`, {
-        credentials: "include",
-      });
+      const res = await fetch(
+        NODE_ENV === "production"
+          ? `https://ahmedarafah.com/api/books/${id}`
+          : `http://localhost:3000/api/books/${id}`,
+        {
+          credentials: "include",
+        }
+      );
 
       if (!res.ok) {
         throw Error("Can't fetch data");
@@ -38,9 +44,15 @@ const Book = () => {
     <div className="min-h-screen w-full bg-[#fbf1c7] text-[#282828] dark:bg-[#282828] dark:text-[#ebdbb2]">
       <div className="mx-auto flex max-w-[90%] flex-col gap-8 py-4 pt-8">
         <img
-          src={`http://localhost:3000/public/${
-            image_url || "book-cover-placeholder.png"
-          }`}
+          src={
+            NODE_ENV === "production"
+              ? `https://ahmedarafah.com/public/${
+                  image_url || "book-cover-placeholder.png"
+                }`
+              : `http://localhost:3000/public/${
+                  image_url || "book-cover-placeholder.png"
+                }`
+          }
           alt={title}
           className="h-auto w-52"
         />
