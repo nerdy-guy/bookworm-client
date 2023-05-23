@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import bookCover from "../assets/book-cover-placeholder.png";
 import Loader from "../components/Loader";
 import NotFound from "./NotFound";
 
@@ -38,11 +37,17 @@ const Book = () => {
   return (
     <div className="min-h-screen w-full bg-[#fbf1c7] text-[#282828] dark:bg-[#282828] dark:text-[#ebdbb2]">
       <div className="mx-auto flex max-w-[90%] flex-col gap-8 py-4 pt-8">
-        <img src={image_url || bookCover} alt={title} className="h-auto w-52" />
+        <img
+          src={`http://localhost:3000/public/${
+            image_url || "book-cover-placeholder.png"
+          }`}
+          alt={title}
+          className="h-auto w-52"
+        />
         <div className="flex flex-col gap-4">
           <h1 className="text-2xl font-bold">
             {title}{" "}
-            {end_date && (
+            {end_date && end_date !== "undefined" && (
               <span className="text-xl font-normal">({end_date})</span>
             )}
           </h1>

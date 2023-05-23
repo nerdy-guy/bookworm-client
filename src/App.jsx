@@ -1,4 +1,8 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -32,11 +36,11 @@ const App = () => {
         },
         {
           path: "/register",
-          element: isAuth ? <Home /> : <Register />,
+          element: isAuth ? <Navigate to="/" replace /> : <Register />,
         },
         {
           path: "/login",
-          element: isAuth ? <Home /> : <Login />,
+          element: isAuth ? <Navigate to="/" replace /> : <Login />,
         },
         {
           path: "/:id",

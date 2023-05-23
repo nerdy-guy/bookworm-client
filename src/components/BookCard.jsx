@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { IoEyeOutline } from "react-icons/io5";
 import { BiEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
-import bookCover from "../assets/book-cover-placeholder.png";
 import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import EditBookModal from "./EditBookModal";
@@ -48,7 +47,13 @@ const BookCard = ({
   return (
     <div className="relative flex w-80 justify-between gap-4 rounded  border-2 border-l-0 bg-[#f9f5d7] text-left text-[#282828] dark:bg-[#1d2021] dark:text-[#ebdbb2]">
       <Link to={`/${book_id}`}>
-        <img src={image_url || bookCover} alt="" className="h-40 w-56" />
+        <img
+          src={`http://localhost:3000/public/${
+            image_url || "book-cover-placeholder.png"
+          }`}
+          alt=""
+          className="h-40 w-56"
+        />
       </Link>
 
       <div className="relative flex flex-col gap-1 pr-8 pt-2">
