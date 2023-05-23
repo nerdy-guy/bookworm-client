@@ -5,7 +5,7 @@ import { BiEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import EditBookModal from "./EditBookModal";
+import EditBookForm from "./EditBookForm";
 import { NODE_ENV } from "../utils/configs";
 
 function classNames(...classes) {
@@ -18,7 +18,7 @@ const BookCard = ({
   image_url,
   author,
   pages,
-  endDate,
+  end_date,
   review,
   notes,
   setBooks,
@@ -51,7 +51,7 @@ const BookCard = ({
   };
 
   return (
-    <div className="relative flex w-80 justify-between gap-4 rounded  border-2 border-l-0 bg-[#f9f5d7] text-left text-[#282828] dark:bg-[#1d2021] dark:text-[#ebdbb2]">
+    <div className="relative flex w-80 gap-4 rounded  border-2 border-l-0 bg-[#f9f5d7] text-left text-[#282828] dark:bg-[#1d2021] dark:text-[#ebdbb2]">
       <Link to={`/${book_id}`}>
         <img
           src={
@@ -72,10 +72,10 @@ const BookCard = ({
         <p className="w-full">{title}</p>
         <small>{author}</small>
         <p>{pages}</p>
-        <time className="absolute bottom-2 right-2">{endDate}</time>
+        <time className="absolute bottom-2 right-2">{end_date}</time>
       </div>
 
-      <Menu as="div" className="relative inline-block text-left">
+      <Menu as="div" className="text- relative ml-auto inline-block">
         <div>
           <Menu.Button className="class absolute right-0 px-3 py-4">
             <BsThreeDotsVertical className="h-6 w-6" aria-hidden="true" />
@@ -139,7 +139,7 @@ const BookCard = ({
       </Menu>
 
       {showEditModal && (
-        <EditBookModal
+        <EditBookForm
           closeEditModal={closeEditModal}
           setBooks={setBooks}
           book_id={book_id}
@@ -149,7 +149,7 @@ const BookCard = ({
           pages={pages}
           review={review}
           notes={notes}
-          endDate={endDate}
+          end_date={end_date}
         />
       )}
     </div>

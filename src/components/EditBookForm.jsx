@@ -4,7 +4,7 @@ import { ThemeContext } from "../contexts/ThemeContext";
 import { createPortal } from "react-dom";
 import { NODE_ENV } from "../utils/configs";
 
-const EditBookModal = ({
+const EditBookForm = ({
   closeEditModal,
   setBooks,
   book_id,
@@ -152,4 +152,4 @@ const EditBookModal = ({
   );
 };
 
-export default EditBookModal;
+export default EditBookForm;
