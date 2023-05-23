@@ -72,7 +72,9 @@ const BookCard = ({
         <p className="w-full">{title}</p>
         <small>{author}</small>
         <p>{pages}</p>
-        <time className="absolute bottom-2 right-2">{end_date}</time>
+        {end_date && end_date !== "undefined" && (
+          <time className="absolute bottom-2 right-2">{end_date}</time>
+        )}
       </div>
 
       <Menu as="div" className="text- relative ml-auto inline-block">

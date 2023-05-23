@@ -11,7 +11,7 @@ const EditBookForm = ({
   title,
   author,
   pages,
-  endDate,
+  end_date,
   review,
   notes,
 }) => {
@@ -28,10 +28,10 @@ const EditBookForm = ({
     setValue("title", title);
     setValue("author", author);
     setValue("pages", pages);
-    setValue("endDate", endDate);
+    setValue("endDate", end_date);
     setValue("review", review);
     setValue("notes", notes);
-  }, [author, endDate, notes, pages, review, setValue, title]);
+  }, [author, end_date, notes, pages, review, setValue, title]);
 
   const editBook = async (data) => {
     const formData = new FormData();
