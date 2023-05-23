@@ -21,7 +21,7 @@ const Home = () => {
     try {
       const res = await fetch(
         NODE_ENV === "production"
-          ? "http://ahmedarafah.com/api/books"
+          ? "https://ahmedarafah.com/api/books"
           : "http://localhost:3000/api/books",
         {
           credentials: "include",
