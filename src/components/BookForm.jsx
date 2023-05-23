@@ -17,6 +17,7 @@ const BookForm = ({ closeModal, setBooks }) => {
       .string()
       .nonempty({ message: "Author is required" })
       .max(255, { message: "Author must be less than 255 characters" }),
+    image_url: z.any(),
     pages: z.number({
       required_error: "Pages is required",
       invalid_type_error: "Pages is required",
