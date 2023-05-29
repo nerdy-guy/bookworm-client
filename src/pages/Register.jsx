@@ -34,7 +34,7 @@ const Register = () => {
     try {
       const res = await fetch(
         NODE_ENV === "production"
-          ? "https://ahmedarafah.com/api/auth/register"
+          ? "https://18061997.xyz/api/auth/register"
           : "http://localhost:3000/api/auth/register",
         {
           method: "POST",

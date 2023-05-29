@@ -16,7 +16,7 @@ const Book = () => {
     try {
       const res = await fetch(
         NODE_ENV === "production"
-          ? `https://ahmedarafah.com/api/books/${id}`
+          ? `https://18061997.xyz/api/books/${id}`
           : `http://localhost:3000/api/books/${id}`,
         {
           credentials: "include",
@@ -46,7 +46,7 @@ const Book = () => {
         <img
           src={
             NODE_ENV === "production"
-              ? `https://ahmedarafah.com/public/${
+              ? `https://18061997.xyz/public/${
                   image_url || "book-cover-placeholder.png"
                 }`
               : `http://localhost:3000/public/${

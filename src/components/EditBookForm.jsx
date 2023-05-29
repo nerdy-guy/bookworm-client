@@ -46,7 +46,7 @@ const EditBookForm = ({
     try {
       const res = await fetch(
         NODE_ENV === "production"
-          ? `https://ahmedarafah.com/api/books/${book_id}`
+          ? `https://18061997.xyz/api/books/${book_id}`
           : `http://localhost:3000/api/books/${book_id}`,
         {
           method: "PUT",

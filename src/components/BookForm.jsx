@@ -47,7 +47,7 @@ const BookForm = ({ closeModal, setBooks }) => {
     try {
       const res = await fetch(
         NODE_ENV === "production"
-          ? "https://ahmedarafah.com/api/books"
+          ? "https://18061997.xyz/api/books"
           : "http://localhost:3000/api/books",
         {
           method: "POST",

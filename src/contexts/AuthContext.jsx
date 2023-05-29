@@ -12,7 +12,7 @@ const AuthProvider = ({ children }) => {
     try {
       const res = await fetch(
         NODE_ENV === "production"
-          ? "https://ahmedarafah.com/api/auth/login"
+          ? "https://18061997.xyz/api/auth/login"
           : "http://localhost:3000/api/auth/login",
         {
           method: "POST",
@@ -43,7 +43,7 @@ const AuthProvider = ({ children }) => {
     try {
       const res = await fetch(
         NODE_ENV === "production"
-          ? "https://ahmedarafah.com/api/auth"
+          ? "https://18061997.xyz/api/auth"
           : "http://localhost:3000/api/auth",
         {
           credentials: "include",

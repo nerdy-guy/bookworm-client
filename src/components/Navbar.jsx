@@ -19,7 +19,7 @@ const Navbar = () => {
     try {
       const res = await fetch(
         NODE_ENV === "production"
-          ? "https://ahmedarafah.com/api/auth/logout"
+          ? "https://18061997.xyz/api/auth/logout"
           : "http://localhost:3000/api/auth/logout",
         {
           method: "POST",
