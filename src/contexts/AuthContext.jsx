@@ -13,7 +13,7 @@ const AuthProvider = ({ children }) => {
       const res = await fetch(
         NODE_ENV === "production"
           ? "https://18061997.xyz/api/auth/login"
-          : "http://localhost:3000/api/auth/login",
+          : "http://localhost:4000/api/auth/login",
         {
           method: "POST",
           headers: {
@@ -44,7 +44,7 @@ const AuthProvider = ({ children }) => {
       const res = await fetch(
         NODE_ENV === "production"
           ? "https://18061997.xyz/api/auth"
-          : "http://localhost:3000/api/auth",
+          : "http://localhost:4000/api/auth",
         {
           credentials: "include",
         }

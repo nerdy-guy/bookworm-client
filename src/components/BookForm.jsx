@@ -48,7 +48,7 @@ const BookForm = ({ closeModal, setBooks }) => {
       const res = await fetch(
         NODE_ENV === "production"
           ? "https://18061997.xyz/api/books"
-          : "http://localhost:3000/api/books",
+          : "http://localhost:4000/api/books",
         {
           method: "POST",
           body: formData,

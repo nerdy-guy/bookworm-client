@@ -17,7 +17,7 @@ const Book = () => {
       const res = await fetch(
         NODE_ENV === "production"
           ? `https://18061997.xyz/api/books/${id}`
-          : `http://localhost:3000/api/books/${id}`,
+          : `http://localhost:4000/api/books/${id}`,
         {
           credentials: "include",
         }
@@ -49,7 +49,7 @@ const Book = () => {
               ? `https://18061997.xyz/public/${
                   image_url || "book-cover-placeholder.png"
                 }`
-              : `http://localhost:3000/public/${
+              : `http://localhost:4000/public/${
                   image_url || "book-cover-placeholder.png"
                 }`
           }

@@ -47,7 +47,7 @@ const EditBookForm = ({
       const res = await fetch(
         NODE_ENV === "production"
           ? `https://18061997.xyz/api/books/${book_id}`
-          : `http://localhost:3000/api/books/${book_id}`,
+          : `http://localhost:4000/api/books/${book_id}`,
         {
           method: "PUT",
           body: formData,
